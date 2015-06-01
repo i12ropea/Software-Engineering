@@ -1,5 +1,3 @@
-main.d: ../main.cpp ../funciones.cpp ../funciones.hpp
-
-../funciones.cpp:
+main.d: ../main.cpp ../funciones.hpp
 
 ../funciones.hpp:
