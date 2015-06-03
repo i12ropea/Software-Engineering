@@ -10,16 +10,25 @@ int menu()
 {
 	int opcion;
 
-	cout<<"------ MENÚ ------\n";
+	cout<<"=============================================="<<endl;
+	cout<<"------------------- MENÚ -------------------\n";
 	cout<<"  1: Listar todos los pacientes del sistema.\n";
 	cout<<"  2: Insertar un paciente nuevo.\n";
-	cout<<"  3: Modificar los datos de un paciente.\n";
-	cout<<"  4: Borrar un paciente.\n";
-	cout<<"  5: Buscar un paciente.\n";
+	cout<<"  3: Añadir cita a paciente\n";
+	cout<<"  4: Modificar los datos de un paciente.\n";
+	cout<<"  5: Borrar un paciente.\n";
+	cout<<"  6: Buscar un paciente.\n";
+	cout<<endl;
+	cout<<"  9: Realizar copia de seguridad.\n";
 	cout<<"  0: Apagar sistema.\n\n";
+	cout<<"----------------------------------------------"<<endl;
 
 	cout<<"Introduce la opción que desee: ";
 	cin>>opcion;
+	cout<<endl;
+	cout<<"==============================================";
+
+	cout<<endl;
 
 	return opcion;
 }
@@ -109,6 +118,11 @@ public:
 		_dni=dni;
 	}
 
+	void setFechaNac(string fn)
+	{
+		_fechaNac=fn;
+	}
+
 	void setTelefono(int telefono)
 	{
 		_telefono=telefono;
@@ -117,6 +131,11 @@ public:
 	void setNumCitas(int num)
 	{
 		_numCitas=num;
+	}
+
+	void setCitas(vector <Cita> aux)
+	{
+		_citas=aux;
 	}
 
 	//modificador del vector citas
@@ -134,6 +153,24 @@ public:
 	}
 
 };
+
+int buscar(const int dni,const vector <Contacto> contactos)
+{
+	Contacto aux;
+	int encon=-1;
+
+	for (int i=0;i<contactos.size();i++)
+	{
+		aux=contactos[i];
+		if (aux.getDNI()==dni)
+		{
+			encon=i;
+			break;
+		}
+	}
+
+	return encon;
+}
 
 void imprimirContacto(Contacto aux)
 {
@@ -157,22 +194,22 @@ void imprimirContacto(Contacto aux)
 	}
 }
 
-void listarContactos()
+vector <Contacto> cargarContactosBaseDatos()
 {
-	cout << "hola5" <<endl;
-
+	vector <Contacto> contactos;
+	vector <Cita> citas;
 	ifstream fich("agenda.txt");
-	vector <Cita> aux_citas;
-	string fecha,hora,motivo,nombre,apell1,apell2,nacimiento;
+	string nombre, apell1, apell2, fn;
 	int dni,telefono,numeroCitas;
-
 	Contacto aux;
+	Cita aux2;
 
-	cout << "hola3" <<endl;
+	int x=0;
 
-	while(!fich.eof())
+
+	while (!fich.eof())
 	{
-		fich >> nombre;
+		fich>>nombre;
 		aux.setNombre(nombre);
 
 		fich >> apell1;
@@ -184,35 +221,190 @@ void listarContactos()
 		fich >> dni;
 		aux.setDNI(dni);
 
+		fich >> fn;
+		aux.setFechaNac(fn);
+
 		fich >> telefono;
 		aux.setTelefono(telefono);
 
 		fich >> numeroCitas;
 		aux.setNumCitas(numeroCitas);
 
-		cout << "hola4" <<endl;
-
 		for (int i=0;i<numeroCitas;i++)
 		{
-			cout<<"bucle 1"<<endl;
+			fich >> aux2.fecha;
+			fich >> aux2.hora;
+			fich >> aux2.motivo;
 
-			fich >> fecha;
-			fich >> hora;
-			fich >> motivo;
-
-			cout<<"antes insertar"<<endl;
-
-			aux.insertarCita(fecha,hora,motivo);
+			citas.push_back(aux2);
 		}
-		cout << "hola" <<endl;
 
-		imprimirContacto(aux);
+		aux.setCitas(citas);
+		citas.clear();
 
-		cout << "hola2" <<endl;
+		contactos.push_back(aux);
 	}
 
 	fich.close();
 
+	return contactos;
+}
+
+void listarContactos(const vector <Contacto> contactos)
+{
+	cout<<contactos.size();
+	for (int i=0;i<contactos.size();i++)
+	{
+		cout<<endl;
+		imprimirContacto(contactos[i]);
+		cout<<"=================="<<endl;
+	}
+
+}
+
+void realizarCopiaDeSeguridad(const vector <Contacto> contactos)
+{
+	Contacto aux;
+	vector <Cita> citas;
+	ofstream fich("aux.txt");
+	if (fich)
+	{
+		for (int i=0; i<contactos.size();i++)
+		{
+			aux=contactos[i];
+
+			fich << aux.getNombre()<< " " << aux.getApellido1() << " " << aux.getApellido2() << " " << aux.getDNI() << " " << aux.getFechaNac() << " " << aux.getTelefono() << " " << aux.getNumCitas()<<" ";
+
+			citas=aux.getCitas();
+
+			for (int j=0; j< aux.getNumCitas();j++)
+			{
+
+
+				fich << citas[j].fecha <<" "<< citas[j].hora <<" "<< citas[j].motivo<<" ";
+			}
+
+			citas.clear();
+
+			if (i!=contactos.size()-1)
+				fich << "\n";
+		}
+
+		fich.close();
+		remove("agenda.txt");
+		rename("aux.txt","agenda.txt");
+
+	}
+	else
+	{
+		cout<<"ERROR al realizar la copia de seguridad!"<<endl;
+	}
+}
+
+void introducirPacienteNuevo(vector <Contacto> &contactos)
+{
+	Contacto aux;
+	string nombre,ap1,ap2,fn;
+	int dni,tlf;
+
+	cout<<"Introducir los datos:"<<endl;
+	cout<<"Introduce el nombre: ";
+	cin>>nombre;
+	cout<<"Introduce el primer apellido: ";
+	cin>>ap1;
+	cout<<"Introduce el segundo apellido: ";
+	cin>>ap2;
+	cout<<"Introduce el dni: ";
+	cin>>dni;
+	cout<<"Introduce la fecha de nacimiento (formato dd/mm/aaaa): ";
+	cin>>fn;
+	cout<<"Introduce el teléfono de contacto: ";
+	cin>>tlf;
+
+	aux.setNombre(nombre);
+	aux.setApellido1(ap1);
+	aux.setApellido2(ap2);
+	aux.setDNI(dni);
+	aux.setFechaNac(fn);
+	aux.setTelefono(tlf);
+	aux.setNumCitas(0);
+
+	contactos.push_back(aux);
+
+	cout<<endl<<"Guardando contacto en la base de datos..."<<endl;
+	realizarCopiaDeSeguridad(contactos);
+	cout<<"Contacto guardado en la base de datos con éxito!"<<endl<<endl;;
+}
+
+void anadirCitaPaciente(vector <Contacto> &contactos,const int paciente,const int pos)
+{
+	vector <Cita> aux;
+	Cita aux2;
+	string f,h,m;
+
+	aux=contactos[pos].getCitas();
+
+
+	cout<<"Introduzca la fecha de la cita: ";
+	cin>>f;
+	cout<<"Introduzca la hora de la cita: ";
+	cin>>h;
+	cout<<"Introduzca el motivo de la cita: ";
+	cin>>m;
+
+	aux2.fecha=f;
+	aux2.hora=h;
+	aux2.motivo=m;
+
+	aux.push_back(aux2);
+
+	contactos[pos].setCitas(aux);
+	contactos[pos].setNumCitas(contactos[pos].getNumCitas()+1);
+}
+
+void modificarDatosPaciente(vector <Contacto> &aux,const int pos)
+{
+	string nombre,ap1,ap2,fn;
+	int dni,tlf;
+
+	cout<<"Estos son los datos del paciente que desea modificar:"<<endl;
+	imprimirContacto(aux[pos]);
+	cout<<endl;
+
+	cout<<"Introducir los datos nuevos:"<<endl;
+	cout<<"Introduce el nombre: ";
+	cin>>nombre;
+	cout<<"Introduce el primer apellido: ";
+	cin>>ap1;
+	cout<<"Introduce el segundo apellido: ";
+	cin>>ap2;
+	cout<<"Introduce el dni: ";
+	cin>>dni;
+	cout<<"Introduce la fecha de nacimiento (formato dd/mm/aaaa): ";
+	cin>>fn;
+	cout<<"Introduce el teléfono de contacto: ";
+	cin>>tlf;
+
+	aux[pos].setNombre(nombre);
+	aux[pos].setApellido1(ap1);
+	aux[pos].setApellido2(ap2);
+	aux[pos].setDNI(dni);
+	aux[pos].setFechaNac(fn);
+	aux[pos].setTelefono(tlf);
+
+}
+
+void borrarPaciente(vector <Contacto> &contactos,const int pos)
+{
+	for(int i=0;i<contactos.size()-1;i++)
+	{
+		if(i>=pos)
+		{
+			contactos[i]=contactos[i+1];
+		}
+	}
+
+	contactos.pop_back();
 }
 
 #endif
