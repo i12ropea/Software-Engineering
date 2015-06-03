@@ -6,6 +6,7 @@
 #include <iostream>
 using namespace std;
 
+//Función para mostrar el menú de opciones del sistema
 int menu()
 {
 	int opcion;
@@ -37,6 +38,7 @@ int menu()
 Apellidos, DNI, fecha de nacimiento, teléfono y citas. Citas es un atributo de múltiple valores
 compuesto por los siguientes atributos: fecha, hora, motivo.*/
 
+//ESTRUCTURA PARA LAS CITAS DE CADA PACIENTE
 typedef struct cita
 {
 	string fecha;
@@ -44,7 +46,7 @@ typedef struct cita
 	string motivo;
 }Cita;
 
-
+//CLASE CONTACTO
 class Contacto
 {
 private:
@@ -154,6 +156,7 @@ public:
 
 };
 
+//Función para buscar un paciente en el sistema
 int buscar(const int dni,const vector <Contacto> contactos)
 {
 	Contacto aux;
@@ -172,6 +175,7 @@ int buscar(const int dni,const vector <Contacto> contactos)
 	return encon;
 }
 
+//Función para imprimir los datos de un paciente
 void imprimirContacto(Contacto aux)
 {
 	vector<Cita> citas;
@@ -189,11 +193,12 @@ void imprimirContacto(Contacto aux)
 	for (it =citas.begin(); it != citas.end(); ++it)
 	{
 		cout<<"    Fecha: "<<it->fecha<<"\n";
-		cout<<"    Hora: "<<it->hora<<"\n";
-		cout<<"    Motivo: "<<it->motivo<<"\n";
+		cout<<"         Hora: "<<it->hora<<"\n";
+		cout<<"         Motivo: "<<it->motivo<<"\n";
 	}
 }
 
+//Función para volcar los datos del fichero .txt al vector
 vector <Contacto> cargarContactosBaseDatos()
 {
 	vector <Contacto> contactos;
@@ -250,6 +255,7 @@ vector <Contacto> cargarContactosBaseDatos()
 	return contactos;
 }
 
+//Función para listar los pacientes del sistema
 void listarContactos(const vector <Contacto> contactos)
 {
 	cout<<contactos.size();
@@ -262,6 +268,7 @@ void listarContactos(const vector <Contacto> contactos)
 
 }
 
+//Función para realizar una copia de seguridad
 void realizarCopiaDeSeguridad(const vector <Contacto> contactos)
 {
 	Contacto aux;
@@ -301,6 +308,7 @@ void realizarCopiaDeSeguridad(const vector <Contacto> contactos)
 	}
 }
 
+//Función para introducir un paciente nuevo en el sistema
 void introducirPacienteNuevo(vector <Contacto> &contactos)
 {
 	Contacto aux;
@@ -336,6 +344,7 @@ void introducirPacienteNuevo(vector <Contacto> &contactos)
 	cout<<"Contacto guardado en la base de datos con éxito!"<<endl<<endl;;
 }
 
+//Función para añadir un cita nueva a un paciente
 void anadirCitaPaciente(vector <Contacto> &contactos,const int paciente,const int pos)
 {
 	vector <Cita> aux;
@@ -362,6 +371,7 @@ void anadirCitaPaciente(vector <Contacto> &contactos,const int paciente,const in
 	contactos[pos].setNumCitas(contactos[pos].getNumCitas()+1);
 }
 
+//Funcion para modificar los datos de un paciente
 void modificarDatosPaciente(vector <Contacto> &aux,const int pos)
 {
 	string nombre,ap1,ap2,fn;
@@ -394,6 +404,7 @@ void modificarDatosPaciente(vector <Contacto> &aux,const int pos)
 
 }
 
+//Funcion para borrar un paciente
 void borrarPaciente(vector <Contacto> &contactos,const int pos)
 {
 	for(int i=0;i<contactos.size()-1;i++)

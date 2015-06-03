@@ -4,6 +4,8 @@ int main()
 {
 	int opc,opc2,pos,encon;
 	int paciente;
+
+	//Al iniciar el sistema se carga la base de datos
 	vector <Contacto> contactos=cargarContactosBaseDatos();
 
 	do
@@ -12,6 +14,8 @@ int main()
 
 		switch(opc)
 		{
+		//APAGAR EL SISTEMA
+		//ANTES DE APAGAR ACTUALIZA LA BASE DE DATOS Y APAGA EL PROGRAMA
 		case 0:
 			cout<<"APAGANDO SISTEMA...\n"<<endl;
 			cout<<endl;
@@ -23,7 +27,7 @@ int main()
 			cout<<"SISTEMA APAGADO"<<endl<<endl;
 			break;
 
-
+		//LISTAR LOS PACIENTES DEL SISTEMA
 		case 1:
 			cout<<endl;
 			cout<<"        CONTACTOS            "<<endl;
@@ -43,6 +47,8 @@ int main()
 			getchar();
 			break;
 
+		//AÑADE UNA CITA NUEVA A UN DETERMINADO USUARIO INTRODUCIDO POR EL USUARIO
+		//SI EL USUARIO NO EXISTE OFRECE LA OPCION DE AÑADIRLO AL SISTEMA
 		case 3:
 			cout<<endl;
 			do
@@ -62,6 +68,7 @@ int main()
 						break;
 
 					case 1:
+						encon=1;
 						introducirPacienteNuevo(contactos);
 						cout<<endl;
 						break;
@@ -73,22 +80,24 @@ int main()
 					if(opc2==1)
 					{
 						encon=1;
+						pos=buscar(paciente,contactos);
 						anadirCitaPaciente(contactos,paciente,pos);
 					}
 				}
 				else
 				{
-					opc2=0;
 					encon=1;
 					anadirCitaPaciente(contactos,paciente,pos);
 				}
-			}while(opc2!=0 or encon!=1);
+			}while(encon!=1);
 			cout<<endl<<"Cita añadida con éxito!";
 			cout<<endl<<endl<<"Pulse enter para volver al menú."<<endl<<endl;
 			getchar();
 			getchar();
 			break;
 
+		//MODIFICAR LOS DATOS DE UN PACIENTE
+		//COMPRUEBA QUE EL PACIENTE EXISTE
 		case 4:
 			cout<<endl;
 			do
@@ -115,6 +124,8 @@ int main()
 			getchar();
 			break;
 
+		//BORRA UN PACIENTE INTRODUCIDO POR EL USUARIO
+		//SI EL USUARIO NO EXISTE EL PROGRAMA LO INDICA
 		case 5:
 			cout<<endl;
 			do
@@ -140,6 +151,8 @@ int main()
 			getchar();
 			break;
 
+		//BUSCAR UN PACIENTE INTRODUCIDO POR EL USUARIO
+		//LA FUNCION BUSCAR DEVULVE LA POSICION DEL PACIENTE SI LO ENCUENTRA (PARA USARLO EN OTRAS FUNCIONES DEL PROGRAMA)
 		case 6:
 			cout<<endl;
 			cout<<"Introduzca el dni del paciente que desea buscar: ";
@@ -157,6 +170,7 @@ int main()
 			getchar();
 			break;
 
+		//ACTUALIZA LA BASE DE DATOS
 		case 9:
 			cout<<endl;
 			cout<<"REALIZANDO COPIA DE SEGURIDAD..."<<endl;
