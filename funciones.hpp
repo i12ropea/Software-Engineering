@@ -252,6 +252,8 @@ vector <Contacto> cargarContactosBaseDatos()
 
 	fich.close();
 
+	contactos.pop_back();
+
 	return contactos;
 }
 
@@ -353,6 +355,11 @@ void anadirCitaPaciente(vector <Contacto> &contactos,const int paciente,const in
 
 	aux=contactos[pos].getCitas();
 
+	cout<<"La cita será añadida al paciente: "<<endl;
+	cout<<"		Nombre: "<<contactos[pos].getNombre()<<endl;
+	cout<<"		Apellidos: "<<contactos[pos].getApellido1()<<" "<<contactos[pos].getApellido2()<<endl;
+	cout<<" 	DNI: "<<contactos[pos].getDNI()<<endl<<endl<<endl;
+
 
 	cout<<"Introduzca la fecha de la cita: ";
 	cin>>f;
@@ -376,24 +383,84 @@ void modificarDatosPaciente(vector <Contacto> &aux,const int pos)
 {
 	string nombre,ap1,ap2,fn;
 	int dni,tlf;
+	char opc;
 
 	cout<<"Estos son los datos del paciente que desea modificar:"<<endl;
 	imprimirContacto(aux[pos]);
 	cout<<endl;
 
-	cout<<"Introducir los datos nuevos:"<<endl;
-	cout<<"Introduce el nombre: ";
-	cin>>nombre;
-	cout<<"Introduce el primer apellido: ";
-	cin>>ap1;
-	cout<<"Introduce el segundo apellido: ";
-	cin>>ap2;
-	cout<<"Introduce el dni: ";
-	cin>>dni;
-	cout<<"Introduce la fecha de nacimiento (formato dd/mm/aaaa): ";
-	cin>>fn;
-	cout<<"Introduce el teléfono de contacto: ";
-	cin>>tlf;
+	cout<<"Introducir los datos nuevos:"<<endl<<endl;
+	cout<<"¿Desea modificar el nombre? (S-->SI; N-->NO)";
+	cin>>opc;
+	if (opc=='S')
+	{
+		cout<<"Introduce el nombre: ";
+		cin>>nombre;
+	}
+	else
+	{
+		nombre=aux[pos].getNombre();
+	}
+
+	cout<<"¿Desea modificar el primer apellido? (S-->SI; N-->NO)";
+	cin>>opc;
+	if (opc=='S')
+	{
+		cout<<"Introduce el primer apellido: ";
+		cin>>ap1;
+	}
+	else
+	{
+		ap1=aux[pos].getApellido1();
+	}
+
+	cout<<"¿Desea modificar el segundo apellido? (S-->SI; N-->NO)";
+	cin>>opc;
+	if (opc=='S')
+	{
+		cout<<"Introduce el segundo apellido: ";
+		cin>>ap2;
+	}
+	else
+	{
+		ap2=aux[pos].getApellido2();
+	}
+
+	cout<<"¿Desea modificar el DNI? (S-->SI; N-->NO)";
+	cin>>opc;
+	if (opc=='S')
+	{
+		cout<<"Introduce el DNI: ";
+		cin>>dni;
+	}
+	else
+	{
+		dni=aux[pos].getDNI();
+	}
+
+	cout<<"¿Desea modificar la fecha de nacimiento? (S-->SI; N-->NO)";
+	cin>>opc;
+	if (opc=='S')
+	{
+		cout<<"Introduce la fecha de nacimiento (formato dd/mm/aaaa): ";
+		cin>>fn;
+	}
+	else
+	{
+		fn=aux[pos].getFechaNac();
+	}
+
+	cout<<"¿Desea modificar el teléfono de contacto? (S-->SI; N-->NO)";
+	cin>>opc;
+	if (opc=='S')
+	{
+		cout<<"Introduce el teléfono de contacto: ";
+		cin>>tlf;
+	}
+	else
+	{
+		tlf=aux[pos].getTelefono();
+	}
 
 	aux[pos].setNombre(nombre);
 	aux[pos].setApellido1(ap1);

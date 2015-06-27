@@ -145,7 +145,7 @@ int main()
 				}
 			}while(pos==-1);
 
-			cout<<endl<<"Paciente modificado con éxito!";
+			cout<<endl<<"Paciente borrado con éxito!";
 			cout<<endl<<endl<<"Pulse enter para volver al menú."<<endl<<endl;
 			getchar();
 			getchar();
@@ -160,7 +160,8 @@ int main()
 			pos=buscar(paciente,contactos);
 			if(pos!=-1)
 			{
-				cout<<"El paciente introducido se encuentra en el sistema."<<endl;
+				//cout<<"El paciente introducido se encuentra en el sistema."<<endl;
+				imprimirContacto(contactos[pos]);
 			}
 			else
 				cout<<"El paciente introducido no se encuentra en el sistema."<<endl;

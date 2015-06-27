@@ -1,0 +1,7 @@
+Para abrir el ejecutable hay dos opciones:
+
+	1) Ejecutar desde la terminal el "a.out"
+	
+	2) Abrir el proyecto con Eclipse y ejecutar desde ahí.
+	
+Nota: el fichero "agenda.txt" es la base de datos del programa.
